@@ -16,3 +16,6 @@ backups/*.dump
 *.swo
 .DS_Store
 .env
+.~lock.*#
+*.swp
+*.swo

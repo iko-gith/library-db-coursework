@@ -177,3 +177,20 @@ CREATE TABLE fine (
                  ON DELETE CASCADE
 );
 CREATE INDEX idx_fine_loan ON fine(loan_id);
+
+CREATE TABLE app_user (
+    id            SERIAL       PRIMARY KEY,
+    username      VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role          VARCHAR(50)  NOT NULL 
+                  CHECK (role IN ('admin', 'librarian', 'reader')),
+    employee_id   INT          REFERENCES employee(id) 
+                  ON DELETE CASCADE,
+    reader_id     INT          REFERENCES reader(id) 
+                  ON DELETE CASCADE,
+    CONSTRAINT check_user_link CHECK (
+        (employee_id IS NOT NULL AND reader_id IS NULL) OR 
+        (employee_id IS NULL AND reader_id IS NOT NULL)
+    )
+);
+CREATE INDEX idx_app_user_username ON app_user(username);
